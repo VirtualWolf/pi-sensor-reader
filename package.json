@@ -1,0 +1,14 @@
+{
+  "name": "pi-sensor-reader",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "VirtualWolf <virtualwolf@virtualwolf.org>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "node-dht-sensor": "~0.0.32",
+    "request": "~2.81.0"
+  }
+}
