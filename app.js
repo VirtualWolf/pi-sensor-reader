@@ -1,43 +1,45 @@
 const sensorLib = require('node-dht-sensor');
-const request = require('request');
+const request = require('superagent');
+const config = require('./config.json');
 
-const sensors = [
-    {
-        name: 'outdoor',
-        type: 22,
-        pin: 4,
-    },
-    {
-        name: 'indoor',
-        type: 22,
-        pin: 17,
-    }
-];
+process.on('unhandledRejection', (err) => {
+    console.log(err.message, err.stack);
+});
 
-function readSensors() {
-    sensors.forEach(sensor => {
-        if (initialiseSensors(sensor.type, sensor.pin)) {
-            var readout = sensorLib.read();
+const sensor = {
+    read: () => {
+        config.sensors.forEach(async sensor => {
+            const readout = sensorLib.read(sensor.type, sensor.pin);
 
-            var data = {
-                sensor: sensor.name,
-                timestamp: new Date().getTime(),
-                temperature: readout.temperature.toFixed(1),
-                humidity: readout.humidity.toFixed(1),
+            const temperature = {
+                G: config.mapping[sensor.name].device,
+                D: config.mapping[sensor.name].temperature,
+                DA: readout.temperature,
+                TIMESTAMP: new Date().getTime(),
             };
-            console.log(`${sensor.name}: ${data.temperature}˚C & ${data.humidity}%`)
-        } else {
-            console.log('Couldn\'t initialise ' + sensor.name);
-        }
-    });
 
-    setTimeout(function() {
-        readSensors();
-    }, 6000);
-}
+            const humidity = {
+                G: config.mapping[sensor.name].device,
+                D: config.mapping[sensor.name].humidity,
+                DA: readout.humidity,
+                TIMESTAMP: new Date().getTime(),
+            };
 
-function initialiseSensors(type, pin) {
-    return sensorLib.initialize(type, pin);
-}
+            await request
+                .post(config.endpoint)
+                .send(temperature)
+                .set('X-Weather-API', config.apiKey);
 
-readSensors();
+            await request
+                .post(config.endpoint)
+                .send(humidity)
+                .set('X-Weather-API', config.apiKey);
+        });
+
+        setTimeout(function() {
+            sensor.read();
+        }, 20000);
+    }
+};
+
+sensor.read();

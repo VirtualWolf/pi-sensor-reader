@@ -9,6 +9,6 @@
   },
   "dependencies": {
     "node-dht-sensor": "~0.0.32",
-    "request": "~2.81.0"
+    "superagent": "^3.8.2"
   }
 }
