@@ -16,20 +16,8 @@ It requires a config file called `config.json` at the root of the repostory, min
                 "pin": 17
             }
         ],
-        "mapping": {
-            "outdoor": {
-                "device": "0404",
-                "temperature": "31",
-                "humidity": "30"
-            },
-            "indoor": {
-                "device": "0904",
-                "temperature": "31",
-                "humidity": "30"
-            }
-        },
         "endpoint": "http://example.com/update",
         "apiKey": "password"
     }
 
-The `mapping` section is there so it's sending its data in exactly the same format as the old Ninja Block Sensor used to (I'm lazy and haven't felt like updating my website's code yet).
+`pin` is the GPIO pin number that the sensor is connected to, and `type` is `22` for the AM2302 sensors (see the `node-dht-sensor` repository above for details on both).

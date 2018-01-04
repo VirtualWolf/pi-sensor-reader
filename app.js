@@ -11,28 +11,16 @@ const sensor = {
         config.sensors.forEach(async sensor => {
             const readout = sensorLib.read(sensor.type, sensor.pin);
 
-            const temperature = {
-                G: config.mapping[sensor.name].device,
-                D: config.mapping[sensor.name].temperature,
-                DA: readout.temperature,
-                TIMESTAMP: new Date().getTime(),
-            };
-
-            const humidity = {
-                G: config.mapping[sensor.name].device,
-                D: config.mapping[sensor.name].humidity,
-                DA: readout.humidity,
-                TIMESTAMP: new Date().getTime(),
+            const payload = {
+                sensor_name: sensor.name,
+                temperature: readout.temperature,
+                humidity: readout.humidity,
+                timestamp: new Date().getTime(),
             };
 
             await request
                 .post(config.endpoint)
-                .send(temperature)
-                .set('X-Weather-API', config.apiKey);
-
-            await request
-                .post(config.endpoint)
-                .send(humidity)
+                .send(payload)
                 .set('X-Weather-API', config.apiKey);
         });
 
