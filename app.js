@@ -1,10 +1,13 @@
 const Sensor = require('./lib/sensor');
 const express = require('express');
 const config = require('./config.json');
+const fs = require('fs-extra');
 
 process.on('unhandledRejection', (err) => {
     console.log(err.message, err.stack);
 });
+
+fs.ensureDirSync('queue');
 
 
 
@@ -26,7 +29,7 @@ config.sensors.forEach(s => {
 async function readSensors () {
     for (const location of locations) {
         await location.sensor.readSensor();
-        await location.sensor.postUpdate();
+        await location.sensor.processUpdate();
     }
 
     setTimeout(async () => {
