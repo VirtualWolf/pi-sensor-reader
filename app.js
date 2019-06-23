@@ -1,7 +1,8 @@
 const Sensor = require('./lib/sensor');
 const express = require('express');
-const config = require('./config.json');
 const fs = require('fs-extra');
+const config = require('./config.json');
+const queueReader = require('./queueReader');
 
 process.on('unhandledRejection', (err) => {
     console.log(err.message, err.stack);
@@ -38,6 +39,21 @@ async function readSensors () {
 }
 
 readSensors();
+
+
+
+
+
+/* === QUEUE READER === */
+async function readQueue() {
+    await queueReader.checkQueueDirectory();
+
+    setTimeout(async () => {
+        await readQueue();
+    }, process.env.QUEUE_CHECK_PERIOD || 300000);
+}
+
+readQueue();
 
 
 

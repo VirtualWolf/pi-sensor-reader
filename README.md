@@ -20,10 +20,13 @@ It requires a config file called `config.json` at the root of the repostory, min
         "apiKey": "password"
     }
 
-`pin` is the GPIO pin number on the Raspberry Pi that the sensor is connected to, and `type` is `22` for the AM2302 sensors (see the `node-dht-sensor` repository above for details on both). `type` defaults to 22 so can be excluded entirely if using DHT22 or AM2302 sensors.
+`pin` is the GPIO pin number on the Raspberry Pi that the sensor is connected to, and `type` is `22` for DH22 or AM2302 sensors (see the `node-dht-sensor` repository above for details on both). `type` defaults to 22 so can be excluded entirely if using DHT22 or AM2302 sensors.
 
 ## Environment variables
-The `endpoint` and `apiKey` options in the `config.json` file can be overridden with the `API_ENDPOINT` and `API_KEY` variables, and a mock sensor for non-Raspberry Pi-based testing can be enabled by setting `ENABLE_MOCK_SENSOR`.
+* The `endpoint` and `apiKey` options in the `config.json` file can be overridden with `API_ENDPOINT` and `API_KEY`.
+* A mock sensor for non-Raspberry Pi-based testing can be enabled by setting `ENABLE_MOCK_SENSOR`.
+* The interval at which to read the sensor(s) can be set with `SENSOR_READ_PERIOD` and is specified in milliseconds (defaults to 20 seconds).
+* The interval at which to check the `queue` directory for unprocessed messages and try to send them can be set with `QUEUE_CHECK_PERIOD` and is specified in milliseconds (defaults to 5 minutes).
 
 ## Tests
-There's currently only very basic tests, they can be run with `npm test`.
+Run with `npm test`.

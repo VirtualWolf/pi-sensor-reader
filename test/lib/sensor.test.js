@@ -57,7 +57,7 @@ describe('Sensor class', function() {
             const files = await fs.readdir('queue');
             const content = await fs.readJson('queue/' + files[0]);
 
-            expect(content.name).to.equal('test');
+            expect(content.sensor_name).to.equal('test');
             expect(content.timestamp).to.match(/\d+/);
             expect(content.temperature).to.equal(20);
             expect(content.humidity).to.equal(50);
