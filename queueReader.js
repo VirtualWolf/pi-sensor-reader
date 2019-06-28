@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const postUpdate = require('./postUpdate');
+const logger = require('./lib/logger');
 
 module.exports = {
     checkQueueDirectory: async () => {
@@ -22,7 +23,7 @@ module.exports = {
 
                 await fs.remove('queue/' + file);
             } catch (err) {
-                console.log('Unable to contact endpoint, not removing ' + file);
+                logger.log('Unable to contact endpoint, not removing ' + file);
             }
         }
     },
