@@ -3,9 +3,10 @@ const express = require('express');
 const fs = require('fs-extra');
 const config = require('./config.json');
 const queueReader = require('./queueReader');
+const logger = require('./lib/logger');
 
 process.on('unhandledRejection', (err) => {
-    console.log(err.message, err.stack);
+    logger.log(err.message, err.stack);
 });
 
 fs.ensureDirSync('queue');
@@ -78,4 +79,4 @@ app.get('/rest/:location', (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log('Listening on port 3000'));
+app.listen(3000, () => logger.log('Listening on port 3000'));
