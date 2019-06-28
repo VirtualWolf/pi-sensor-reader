@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const postUpdate = require('./postUpdate');
+const postUpdate = require('./lib/postUpdate');
 const logger = require('./lib/logger');
 
 module.exports = {
