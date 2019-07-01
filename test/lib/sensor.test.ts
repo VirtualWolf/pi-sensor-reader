@@ -1,12 +1,16 @@
-const Sensor = require('../../lib/sensor');
-const expect = require('chai').expect;
-const fs = require('fs-extra');
+import { Sensor } from '../../src/lib/sensor';
+import { expect } from 'chai';
+import fs from 'fs-extra';
 const util = require('../util');
 
-const testSensor = new Sensor({name: 'test', pin: 7});
+const testSensor = new Sensor({name: 'test', type: 22, pin: 7});
 
 describe('Sensor class', function() {
     before(async function() {
+        await fs.emptyDir('queue');
+    });
+
+    after(async function() {
         await fs.emptyDir('queue');
     });
 

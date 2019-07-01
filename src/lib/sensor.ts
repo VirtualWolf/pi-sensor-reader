@@ -1,7 +1,7 @@
 const sensorLib = require('node-dht-sensor').promises;
-const postUpdate = require('./postUpdate');
-const writeToQueue = require('../lib/writeToQueue');
-const logger = require('./logger');
+import { postUpdate } from './postUpdate';
+import { writeToQueue } from './writeToQueue';
+import { log } from './logger';
 
 if (process.env.ENABLE_MOCK_SENSOR) {
     sensorLib.initialize({
@@ -14,15 +14,20 @@ if (process.env.ENABLE_MOCK_SENSOR) {
     });
 }
 
-module.exports = class Sensor {
-    constructor({name, type = 22, pin}) {
-        this.name = name;
-        this.type = type;
-        this.pin = pin;
+export class Sensor {
+    public name: string;
 
-        this.temperature = null;
-        this.humidity = null;
-        this.timestamp = null;
+    private type: number = 22;
+    private pin: number;
+
+    private temperature: number = 0;
+    private humidity: number = 0;
+    private timestamp: number = 0;
+
+    constructor(params: {name: string, type: number, pin: number}) {
+        this.name = params.name;
+        this.type = params.type;
+        this.pin = params.pin;
     }
 
     async readSensor() {
@@ -33,7 +38,7 @@ module.exports = class Sensor {
             this.humidity = readout.humidity;
             this.timestamp = new Date().getTime();
         } catch (err) {
-            logger.log('Failed to read sensor data: ' + err);
+            log('Failed to read sensor data: ' + err);
         }
     }
 
@@ -46,7 +51,7 @@ module.exports = class Sensor {
                 humidity: this.humidity,
             });
         } catch (err) {
-            logger.log(`Error while posting update for ${this.name} at timestamp ${this.timestamp}. Status: ${err.status}; Reason: ${err.message}`);
+            log(`Error while posting update for ${this.name} at timestamp ${this.timestamp}. Status: ${err.status}; Reason: ${err.message}`);
             try {
                 await writeToQueue({
                     sensor_name: this.name,
@@ -55,7 +60,7 @@ module.exports = class Sensor {
                     humidity: this.humidity,
                 });
             } catch (err) {
-                logger.log('Failed to write file: ' + err);
+                log('Failed to write file: ' + err);
             }
         }
     }

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "baseUrl": "./",
+        "allowJs": false,
+        "target": "ES2017",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "rootDirs": [
+            "./src",
+            "./config.json"],
+        "strict": true
+    },
+    "exclude": [
+        "node_modules",
+        "test"
+    ]
+}

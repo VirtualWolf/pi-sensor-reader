@@ -22,6 +22,9 @@ It requires a config file called `config.json` at the root of the repostory, min
 
 `pin` is the GPIO pin number on the Raspberry Pi that the sensor is connected to, and `type` is `22` for DH22 or AM2302 sensors (see the `node-dht-sensor` repository above for details on both). `type` defaults to 22 so can be excluded entirely if using DHT22 or AM2302 sensors.
 
+## Running
+This has been converted to TypeScript, compilation and running is done as one with `npm start`. Javascript files are output to the `build` directory.
+
 ## Environment variables
 * The `endpoint` and `apiKey` options in the `config.json` file can be overridden with `API_ENDPOINT` and `API_KEY`.
 * A mock sensor for non-Raspberry Pi-based testing can be enabled by setting `ENABLE_MOCK_SENSOR`.

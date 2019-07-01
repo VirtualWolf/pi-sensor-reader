@@ -1,11 +1,16 @@
-const queueReader = require('../queueReader');
-const expect = require('chai').expect;
-const fs = require('fs-extra');
-const util = require('./util');
-const writeToQueue = require('../lib/writeToQueue');
+import { checkQueueDirectory } from '../../src/lib/queueReader';
+import { expect } from 'chai';
+import 'mocha';
+import fs from 'fs-extra';
+const util = require('../util');
+import { writeToQueue } from '../../src/lib/writeToQueue';
 
 describe('queueReader', function() {
     before(async function() {
+        await fs.emptyDir('queue');
+    });
+
+    after(async function() {
         await fs.emptyDir('queue');
     });
 
@@ -22,7 +27,7 @@ describe('queueReader', function() {
 
         it('should not remove a message file if the endpoint can\'t be contacted', async function() {
             const scope = util.mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 500});
-            await queueReader.checkQueueDirectory();
+            await checkQueueDirectory();
 
             const files = await fs.readdir('queue');
             expect(scope.isDone()).to.be.true;
@@ -31,7 +36,7 @@ describe('queueReader', function() {
 
         it('should remove the message file if the endpoint was successfully contacted', async function() {
             const scope = util.mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 204});
-            await queueReader.checkQueueDirectory();
+            await checkQueueDirectory();
 
             const files = await fs.readdir('queue');
             expect(scope.isDone()).to.be.true;
