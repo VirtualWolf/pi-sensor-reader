@@ -21,8 +21,9 @@ export async function checkQueueDirectory () {
             });
 
             await fs.remove('queue/' + file);
+            log('Successfully posted saved update ' + file);
         } catch (err) {
-            log('Unable to contact endpoint, not removing ' + file);
+            return;
         }
     }
 }
