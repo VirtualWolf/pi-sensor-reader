@@ -1,0 +1,18 @@
+{
+    "sensors": [
+        {
+            "name": "outdoor",
+            "type": 22,
+            "pin": 4
+        },
+        {
+            "name": "indoor",
+            "type": 22,
+            "pin": 17,
+            "checkTemperatureDifference": true,
+            "temperatureDifferenceThreshold": 0.3
+        }
+    ],
+    "endpoint": "http://localhost:3000/rest/weather",
+    "apiKey": "foobar"
+}
