@@ -1,11 +1,11 @@
 {
   "name": "pi-sensor-reader",
-  "version": "3.0.0",
+  "version": "3.1.1",
   "main": "app.ts",
   "author": "VirtualWolf <virtualwolf@virtualwolf.org>",
   "license": "MIT",
   "scripts": {
-    "start": "./node_modules/.bin/tsc && node build/app.js",
+    "start": "node build/app.js",
     "dev": "./node_modules/.bin/ts-node src/app.ts",
     "tsc": "./node_modules/.bin/tsc",
     "test": "ENABLE_MOCK_SENSOR=true API_ENDPOINT=http://localhost API_KEY=password ./node_modules/.bin/mocha  -r ts-node/register test/**/*.test.ts"

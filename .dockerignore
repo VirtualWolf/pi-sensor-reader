@@ -1,0 +1,16 @@
+config.json
+build
+queue
+npm-debug.log
+.git
+.DS_Store
+*.swp
+.gitignore
+.nyc_output
+.tmp
+coverage
+nodemon.json
+test
+node_modules
+bin
+
