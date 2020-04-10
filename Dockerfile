@@ -7,7 +7,7 @@ WORKDIR /opt/build
 COPY package*.json tsconfig.json ./
 RUN npm install
 COPY src src
-RUN npm run tsc
+RUN npm run compile
 
 FROM base AS release
 RUN mkdir -p /opt/service && chown -R node: /opt/service
