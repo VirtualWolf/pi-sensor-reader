@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  pi-sensor-reader:
+    image: virtualwolf/pi-sensor-reader:latest
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ./config.json:/opt/service/config.json
+      - ./queue:/opt/service/queue

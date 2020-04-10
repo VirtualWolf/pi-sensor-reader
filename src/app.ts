@@ -40,7 +40,7 @@ setInterval(async () => {
         await location.sensor.readSensor();
         await location.sensor.processUpdate();
     }
-}, parseInt(<string>process.env.SENSOR_READ_PERIOD) || 20000);
+}, parseInt(<string>process.env.SENSOR_READ_PERIOD) || require('../config.json').sensorReadPeriod || 20000);
 
 
 
@@ -49,7 +49,7 @@ setInterval(async () => {
 /* === QUEUE READER === */
 setInterval(async () => {
     await checkQueueDirectory();
-}, parseInt(<string>process.env.QUEUE_CHECK_PERIOD) || 300000);
+}, parseInt(<string>process.env.QUEUE_CHECK_PERIOD) || require('../config.json').queueCheckPeriod || 300000);
 
 
 

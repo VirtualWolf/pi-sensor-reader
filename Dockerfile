@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine AS base
+FROM arm32v6/node:12.16.2-alpine AS base
 
 FROM base AS build
 RUN apk add --no-cache make gcc g++ python
@@ -18,4 +18,3 @@ RUN npm prune --production && rm -r /opt/service/src /opt/service/tsconfig.json
 EXPOSE 3000
 
 CMD ["npm", "start"]
-
