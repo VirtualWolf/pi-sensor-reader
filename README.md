@@ -53,7 +53,7 @@ To run it as a local-only system without trying to send data to an HTTP endpoint
 ```
 version: '3.3'
 services:
-  pi-sensor-reader:
+  reader:
     [...]
     environment:
       - LOCAL_ONLY=true
