@@ -8,16 +8,18 @@ COPY package*.json tsconfig.json ./
 RUN npm install
 COPY src src
 RUN npm run compile
+RUN npm prune --production && rm -r /opt/build/src /opt/build/tsconfig.json
 
 FROM base AS release
-RUN mkdir -p /opt/service && chown -R node: /opt/service
-# 997 is the "gpio" groupId on the Raspbian host and allows access to /dev/gpiomem
-RUN addgroup -g 997 gpio
-RUN adduser node gpio
+RUN mkdir -p /opt/service && \
+    chown -R node: /opt/service && \
+    # 997 is the "gpio" groupId on the Raspbian host and allows access to
+    # /dev/gpiomem from inside the container
+    addgroup -g 997 gpio && \
+    adduser node gpio
 USER node
 WORKDIR /opt/service
 COPY --from=build --chown=node:node /opt/build /opt/service
-RUN npm prune --production && rm -r /opt/service/src /opt/service/tsconfig.json
 
 EXPOSE 3000
 
