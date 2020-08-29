@@ -1,5 +1,6 @@
 import { Sensor } from './lib/sensor';
 import express from 'express';
+import cors from 'cors';
 import fs from 'fs-extra';
 const config = require('../config.json');
 import { checkQueueDirectory } from './lib/queueReader';
@@ -57,6 +58,7 @@ setInterval(async () => {
 
 /* === REST ENDPOINTS === */
 const app = express();
+app.use(cors());
 
 app.get('/rest/:location', (req, res) => {
     const index = locations.findIndex(i => i.sensor.name === req.params.location);
