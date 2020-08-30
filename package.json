@@ -8,7 +8,7 @@
     "start": "node build/app.js",
     "dev": "./node_modules/.bin/ts-node src/app.ts",
     "compile": "./node_modules/.bin/tsc",
-    "test": "ENABLE_MOCK_SENSOR=true API_ENDPOINT=http://localhost API_KEY=password ./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts"
+    "test": "TEST=true API_ENDPOINT=http://localhost API_KEY=password ./node_modules/.bin/mocha -r ts-node/register test/**/*.test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -27,12 +27,14 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^13.9.2",
     "@types/rewire": "^2.5.28",
+    "@types/sinon": "^9.0.5",
     "@types/superagent": "^4.1.7",
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
     "eslint-config-node-style-guide": "^3.0.0",
     "mocha": "^7.1.1",
     "nock": "^12.0.3",
+    "sinon": "^9.0.3",
     "ts-node": "^8.7.0",
     "typescript": "^3.8.3"
   }

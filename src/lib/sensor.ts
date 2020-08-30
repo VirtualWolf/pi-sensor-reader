@@ -3,17 +3,6 @@ import { postUpdate } from './postUpdate';
 import { writeToQueue } from './writeToQueue';
 import { log } from './logger';
 
-if (process.env.ENABLE_MOCK_SENSOR) {
-    sensorLib.initialize({
-        test: {
-            fake: {
-                temperature: 20,
-                humidity: 50,
-            }
-        }
-    });
-}
-
 interface SensorParameters {
     name: string;
     type: number;
@@ -44,17 +33,29 @@ export class Sensor {
 
     async readSensor() {
         try {
-            const readout = await sensorLib.read(this.type, this.pin);
+            const { temperature, humidity } = await sensorLib.read(this.type, this.pin);
 
             if (this.temperature === 0 && this.humidity === 0) {
-                log(`[${this.name}] First run of application, setting first reading: ${readout.temperature}˚ and ${readout.humidity}%.`);
+                log({
+                    message: `First run of application, setting first reading: ${temperature}˚ and ${humidity}%`,
+                    name: this.name,
+                });
 
-                this.temperature = readout.temperature;
-                this.humidity = readout.humidity;
+                if (this.checkTemperatureDifference) {
+                    log({
+                        message: `Enabling temperature differential checking, threshold set to ${this.temperatureDifferenceThreshold}`,
+                        name: this.name,
+                    });
+                }
+
+                this.temperature = temperature;
+                this.humidity = humidity;
                 this.timestamp = new Date().getTime();
 
                 return;
             }
+
+            log({ message: `New readout: ${temperature}˚ and ${humidity}%.`, name: this.name, level: 'DEBUG' });
 
             if (this.checkTemperatureDifference) {
                 // Check the absolute difference between the two values, and if they
@@ -63,20 +64,35 @@ export class Sensor {
                 // This helps guard against both the sensor giving weird spurious
                 // temperatures, and also inadvertent direct sunlight on the sensor
                 // during certain times of day!
-                const difference = Math.abs(this.temperature - readout.temperature);
+                const difference = Math.abs(this.temperature - temperature);
+
+                log({
+                    message: 'Temperature difference: ' + difference,
+                    name: this.name,
+                    level: 'DEBUG',
+                });
 
                 if (difference > this.temperatureDifferenceThreshold) {
-                    log(`[${this.name}] Skipping because difference is too large. Currently ${this.temperature}, got ${readout.temperature}`);
+                    log({
+                        message: `Skipping because difference is too large. Currently ${this.temperature}, got ${temperature}`,
+                        name: this.name,
+                    });
 
                     return;
                 }
             }
 
-            this.temperature = readout.temperature;
-            this.humidity = readout.humidity;
+            log({
+                message: `Successfully updated with new readout: ${temperature}˚ and ${humidity}%`,
+                name: this.name,
+                level: 'DEBUG',
+            });
+
+            this.temperature = temperature;
+            this.humidity = humidity;
             this.timestamp = new Date().getTime();
         } catch (err) {
-            log(`[${this.name}] Failed to read sensor data: ${err}`);
+            log({ message: `Failed to read sensor data: ${err}`, name: this.name });
         }
     }
 
@@ -89,7 +105,12 @@ export class Sensor {
                 humidity: this.humidity,
             });
         } catch (err) {
-            log(`Error while posting update for ${this.name} at timestamp ${this.timestamp}. Status: ${err.status}; Reason: ${err.message}`);
+            log({
+                message:
+                `Error while posting update for ${this.name} at timestamp ${this.timestamp}. Status: ${err.status}; Reason: ${err.message}`,
+                name: this.name,
+            });
+
             try {
                 await writeToQueue({
                     sensor_name: this.name,
@@ -98,7 +119,10 @@ export class Sensor {
                     humidity: this.humidity,
                 });
             } catch (err) {
-                log('Failed to write file: ' + err);
+                log({
+                    message: 'Failed to write file: ' + err,
+                    name: this.name,
+                });
             }
         }
     }

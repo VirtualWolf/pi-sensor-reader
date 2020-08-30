@@ -2,7 +2,7 @@ import { checkQueueDirectory } from '../../src/lib/queueReader';
 import { expect } from 'chai';
 import 'mocha';
 import fs from 'fs-extra';
-const util = require('../util');
+import { mockApiEndpointResponse } from '../util';
 import { writeToQueue } from '../../src/lib/writeToQueue';
 
 describe('queueReader', function() {
@@ -26,7 +26,7 @@ describe('queueReader', function() {
         });
 
         it('should not remove a message file if the endpoint can\'t be contacted', async function() {
-            const scope = util.mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 500});
+            const scope = mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 500});
             await checkQueueDirectory();
 
             const files = await fs.readdir('queue');
@@ -35,7 +35,7 @@ describe('queueReader', function() {
         });
 
         it('should remove the message file if the endpoint was successfully contacted', async function() {
-            const scope = util.mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 204});
+            const scope = mockApiEndpointResponse({temperature: 30, humidity: 40, returnStatus: 204});
             await checkQueueDirectory();
 
             const files = await fs.readdir('queue');

@@ -7,17 +7,16 @@ import { checkQueueDirectory } from './lib/queueReader';
 import { log } from './lib/logger';
 
 process.on('unhandledRejection', (err: any) => {
-    log(err.message);
-    log(err.stack);
+    log({ message: err.message });
+    log({ message: err.stack });
 });
 
 fs.ensureDirSync('queue');
 
+/***************
+ *** SENSORS ***
+ ***************/
 
-
-
-
-/* === SENSORS === */
 interface Location {
     sensor: Sensor
 }
@@ -43,20 +42,18 @@ setInterval(async () => {
     }
 }, parseInt(<string>process.env.SENSOR_READ_PERIOD) || require('../config.json').sensorReadPeriod || 20000);
 
+/********************
+ *** QUEUE READER ***
+ ********************/
 
-
-
-
-/* === QUEUE READER === */
 setInterval(async () => {
     await checkQueueDirectory();
 }, parseInt(<string>process.env.QUEUE_CHECK_PERIOD) || require('../config.json').queueCheckPeriod || 300000);
 
+/**********************
+ *** REST ENDPOINTS ***
+ **********************/
 
-
-
-
-/* === REST ENDPOINTS === */
 const app = express();
 app.use(cors());
 
@@ -76,4 +73,4 @@ app.get('/rest/:location', (req, res) => {
     });
 });
 
-app.listen(3000, () => log('Listening on port 3000'));
+app.listen(3000, () => log({ message: 'Listening on port 3000' }));

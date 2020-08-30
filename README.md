@@ -40,9 +40,9 @@ It includes a local Express server running on port 3000 that returns the latest 
 * `queueCheckPeriod` — Optional. When the `LOCAL_ONLY` environment variable is not set, updates which fail to be sent to the URL given in `endpoint` (due to intermittent network flakiness for example) will be written to the `queue` directory at the root level of this repository. `queueCheckPeriod` configures how often this directory should be read and updates attempted to be re-sent. Specified in milliseconds and defaults to `300000` (300 seconds, five minutes) if not specified.
 
 ## Environment variables
+* `DEBUG` can be set to enable additional debug logging.
 * `LOCAL_ONLY` can be set to skip sending updates to the HTTP endpoint, in which case the `endpoint` and `apiKey` options in `config.json` can be entirely omitted (the Express server at port 3000 remains running).
 * The `endpoint`, `apiKey`, `sensorReadPeriod`, and `queueCheckPeriod` options in `config.json` file can be overridden with `API_ENDPOINT`, `API_KEY`, `SENSOR_READ_PERIOD`, and `QUEUE_CHECK_PERIOD` respectively.
-* A mock sensor for non-Raspberry Pi-based testing can be enabled by setting `ENABLE_MOCK_SENSOR`.
 
 ## Running
 ### With Docker
