@@ -25,12 +25,14 @@ interface Locations extends Array<Location> {}
 
 const locations: Locations = [];
 
-config.sensors.forEach((s: {name: string, type: number, pin: number}) => {
+config.sensors.forEach((s: {name: string, type: number, pin: number, checkTemperatureDifference: boolean, temperatureDifferenceThreshold: number}) => {
     locations.push({
         sensor: new Sensor({
             name: s.name,
             type: s.type,
             pin: s.pin,
+            checkTemperatureDifference: s.checkTemperatureDifference,
+            temperatureDiffenceThreshold: s.temperatureDifferenceThreshold
         }),
     });
 });
