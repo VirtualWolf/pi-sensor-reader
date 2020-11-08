@@ -10,21 +10,25 @@ export async function checkQueueDirectory () {
     }
 
     for (let file of files) {
-        const content = await fs.readJson('queue/' + file);
-
         try {
-            await postUpdate({
-                sensor_name: content.sensor_name,
-                timestamp: content.timestamp,
-                temperature: content.temperature,
-                humidity: content.humidity,
-            });
+            const content = await fs.readJson('queue/' + file);
 
-            await fs.remove('queue/' + file);
+            try {
+                await postUpdate({
+                    sensor_name: content.sensor_name,
+                    timestamp: content.timestamp,
+                    temperature: content.temperature,
+                    humidity: content.humidity,
+                });
 
-            log({message: 'Successfully posted saved update ' + file});
+                await fs.remove('queue/' + file);
+
+                log({message: 'Successfully posted saved update ' + file});
+            } catch (err) {
+                return;
+            }
         } catch (err) {
-            return;
+            log({message: `Couldn't parse JSON in ${file}: ${err}`});
         }
     }
 }
