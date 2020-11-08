@@ -58,7 +58,7 @@ describe('Sensor class', function() {
                 this.stub.restore();
             });
 
-            it('should reject a temperature difference of more than 1.0 degrees', async function() {
+            it('should reject a temperature difference of more than 0.8 degrees', async function() {
                 this.stub.resolves({temperature: 30.9, humidity: 25});
 
                 await this.sensor.readSensor();
